@@ -27,11 +27,24 @@ func SaveData(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	query := `INSERT INTO virus_data (data, ip_address) VALUES ($1, $2)`
-	_, err = db.Exec(query, string(b), r.RemoteAddr)
+	_, err = db.Exec(query, string(b), readUserIP(r))
 	if err != nil {
 		log.Println(err)
 		return
 	}
+}
+
+func readUserIP(r *http.Request) string {
+	IPAddress := r.Header.Get("X-Real-Ip")
+	if IPAddress == "" {
+		IPAddress = r.Header.Get("X-Forwarded-For")
+	}
+
+	if IPAddress == "" {
+		IPAddress = r.RemoteAddr
+	}
+
+	return IPAddress
 }
 
 func proceedEnvVariable(key string) string {
