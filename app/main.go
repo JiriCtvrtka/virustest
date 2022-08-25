@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 )
 
 type virusChunk struct {
@@ -20,6 +19,7 @@ func main() {
 		log.Panic("ENDPOINT env variable is not defined")
 	}
 
+	// TODO: add keylogger, data collector etc.
 	data := virusChunk{
 		Data: "xxxxxx",
 	}
@@ -35,13 +35,4 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(res)
-}
-
-func showdown() {
-	cmd := exec.Command("shutdown", "/s", "/t", "0")
-	err := cmd.Run()
-
-	if err != nil {
-		log.Fatal(err)
-	}
 }
