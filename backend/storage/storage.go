@@ -24,6 +24,7 @@ func SaveData(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+	defer db.Close()
 
 	query := `INSERT INTO virus_data (data, ip_address) VALUES ($1, $2)`
 	_, err = db.Exec(query, string(b), r.RemoteAddr)
@@ -56,7 +57,6 @@ func connectToDB() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
